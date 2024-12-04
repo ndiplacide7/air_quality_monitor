@@ -1,0 +1,41 @@
+# Django-specific files
+*.sqlite3
+*.db
+db.sqlite3
+local_settings.py
+
+# Virtual environment
+venv/
+env/
+
+# Build files
+dist/
+build/
+*.egg-info/
+
+# PyInstaller
+*.spec
+
+# IDE files
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ropeproject/
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Test results
+.coverage
+htmlcov/
+
+# Celery
+celerybeat-schedule
+
+# Other common files
+*.DS_Store
+Thumbs.db
