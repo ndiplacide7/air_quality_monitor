@@ -1,47 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">My Air Quality Stations</h1>
-    
-    <a href="{% url 'station_create' %}" class="btn btn-primary mb-3">
-        Add New Station
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-4">My Air Quality Stations</h1>
+
+    <a href="{% url 'station_create' %}" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded shadow-sm">
+        <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 5a1 1 0 0 0-1 1v3h-3a1 1 0 0 0-1-1v-3a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v3h-3a1 1 0 0 0 0 2h3v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 0-2h-3z" /></svg>
+        <span>Add New Station</span>
     </a>
 
     {% if stations %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Station Type</th>
-                    <th>Coordinates</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for station in stations %}
-                <tr>
-                    <td>{{ station.name }}</td>
-                    <td>{{ station.location }}</td>
-                    <td>{{ station.get_station_type_display }}</td>
-                    <td>{{ station.latitude }}, {{ station.longitude }}</td>
-                    <td>
-                        <a href="{% url 'station_update' station.pk %}" class="btn btn-sm btn-warning">
-                            Edit
-                        </a>
-                        <a href="{% url 'station_delete' station.pk %}" class="btn btn-sm btn-danger">
-                            Delete
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="overflow-x-auto rounded-lg shadow mt-4">
+            <table class="table w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="p-4">Name</th> 1 
+                        <th scope="col" class="p-4">Location</th>
+                        <th scope="col" class="p-4">Station Type</th>
+                        <th scope="col" class="p-4">Coordinates</th>
+                        <th scope="col" class="p-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for station in stations %}
+                    <tr class="border-b hover:bg-gray-100">
+                        <td class="p-4">{{ station.name }}</td>
+                        <td class="p-4">{{ station.location }}</td>
+                        <td class="p-4">{{ station.get_station_type_display }}</td>
+                        <td class="p-4">{{ station.latitude }}, {{ station.longitude }}</td>
+                        <td class="p-4 flex justify-end space-x-2">
+                            <a href="{% url 'station_update' station.pk %}" class="inline-flex items-center px-2 py-1 text-sm font-bold text-center rounded shadow-sm bg-green-400 hover:bg-green-500 focus:outline-none">
+                                <svg class="fill-current w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.585 3.585a2 2 0 112.828 2.828l-.707.707L8.778 11.317l4.807 4.807l.707-.707a2 2 0 012.828-2.828l-.707-.707zM6.585 5.585a2 2 0 102.828 2.828l-.707.707L3.778 13.317l4.807 4.807l.707-.707a2 2 0 002.828-2.828l-.707-.707z" /></svg>
+                                Edit
+                            </a>
+                            <a href="{% url 'station_delete' station.pk %}" class="inline-flex items-center px-2 py-1 text-sm font-bold text-center rounded shadow-sm bg-red-400 hover:bg-red-500 focus:outline-none">
+                                <svg class="fill-current w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 12a2 2 0 00-2 2v2a2 2 0 002 2h8a2 2 0 002-2v-2a2 2 0 00-2-2h-8zm0-8a2 2 0 00-2 2v2a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2h-8z" /></svg>
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <p class="alert alert-info">
             You have no air quality stations yet. 
-            <a href="{% url 'station_create' %}">Add your first station</a>
+            <a href="{% url 'station_create' %}" class="text-blue-500 hover:underline">Add your first station</a>
         </p>
     {% endif %}
 </div>

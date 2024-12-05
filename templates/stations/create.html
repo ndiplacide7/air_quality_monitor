@@ -1,60 +1,90 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">Add New Air Quality Station</h1>
-    
-    <form method="post">
-        {% csrf_token %}
-        
-        <div class="form-group mb-3">
-            <label for="{{ form.name.id_for_label }}">Station Name</label>
-{#            {{ form.name|add_class:'form-control' }}#}
-            {{ form.name }}
-            {% if form.name.errors %}
-                <div class="text-danger">{{ form.name.errors }}</div>
-            {% endif %}
-        </div>
+<div class="container mx-auto px-4 py-8 flex justify-center items-center">
+    <div class="w-full max-w-md">
+        <h1 class="text-3xl font-bold mb-4 text-center">Add New Air Quality Station</h1>
 
-        <div class="form-group mb-3">
-            <label for="{{ form.location.id_for_label }}">Location</label>
-            {{ form.location }}
-            {% if form.location.errors %}
-                <div class="text-danger">{{ form.location.errors }}</div>
-            {% endif %}
-        </div>
+        <form method="post">
+            {% csrf_token %}
 
-        <div class="row">
-            <div class="col-md-6 form-group mb-3">
-                <label for="{{ form.latitude.id_for_label }}">Latitude</label>
-{#                {{ form.latitude|add_class:'form-control' }}#}
-                {{ form.latitude }}
-                {% if form.latitude.errors %}
-                    <div class="text-danger">{{ form.latitude.errors }}</div>
+            <div class="mb-4">
+                <label for="{{ form.name.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                    Station Name
+                </label>
+                <input type="text" id="{{ form.name.id_for_label }}" name="{{ form.name.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
+                {% if form.name.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {{ form.name.errors }}
+                    </div>
                 {% endif %}
             </div>
-            
-            <div class="col-md-6 form-group mb-3">
-                <label for="{{ form.longitude.id_for_label }}">Longitude</label>
-{#                {{ form.longitude|add_class:'form-control' }}#}
-                {{ form.longitude }}
-                {% if form.longitude.errors %}
-                    <div class="text-danger">{{ form.longitude.errors }}</div>
+
+            <div class="mb-4">
+                <label for="{{ form.location.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                    Location
+                </label>
+                <input type="text" id="{{ form.location.id_for_label }}" name="{{ form.location.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
+                {% if form.location.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {{ form.location.errors }}
+                    </div>
                 {% endif %}
             </div>
-        </div>
 
-        <div class="form-group mb-3">
-            <label for="{{ form.station_type.id_for_label }}">Station Type</label>
-{#            {{ form.station_type|add_class:'form-control' }}#}
-            {{ form.station_type }}
-            {% if form.station_type.errors %}
-                <div class="text-danger">{{ form.station_type.errors }}</div>
-            {% endif %}
-        </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="mb-4">
+                    <label for="{{ form.latitude.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                        Latitude
+                    </label>
+                    <input type="number" step="any" id="{{ form.latitude.id_for_label }}" name="{{ form.latitude.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
+                    {% if form.latitude.errors %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form.latitude.errors }}
+                        </div>
+                    {% endif %}
+                </div>
 
-        <button type="submit" class="btn btn-primary">Create Station</button>
-        <a href="{% url 'station_list' %}" class="btn btn-secondary">Cancel</a>
-    </form>
+                <div class="mb-4">
+                    <label for="{{ form.longitude.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                        Longitude
+                    </label>
+                    <input type="number" step="any" id="{{ form.longitude.id_for_label }}" name="{{ form.longitude.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
+                    {% if form.longitude.errors %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form.longitude.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="{{ form.station_type.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                    Station Type                    
+                </label>
+                <select id="{{ form.station_type.id_for_label }}" name="{{ form.station_type.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
+                    {% for choice in form.station_type  %}
+                        choice
+{#                        <option value="{{ form.station_type }}">{{ form.station_type }}</option>#}
+                    {% endfor %}
+                </select>
+                {% if form.station_type.errors %}
+                    <div class="text-red-500 text-sm mt-2">
+                        {{ form.station_type.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="flex justify-center space-x-2">
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded shadow-sm">
+                    <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 5a1 1 0 0 0-1 1v3h-3a1 1 0 0 0-1-1v-3a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v3h-3a1 1 0 0 0 0 2h3v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 0-2h-3z" /></svg>
+                    <span>Create Station</span>
+                </button>
+                <a href="{% url 'station_list' %}" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded shadow-sm">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
