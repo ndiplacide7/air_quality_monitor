@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Air Quality | Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="container profile-container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2>User Profile</h2>
+                </div>
+                <div class="card-body">
+                    <h3>{{ user.username }}</h3>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Organization:</strong> {{ user.organization|default:"Not specified" }}</p>
+                    <p><strong>Phone Number:</strong> {{ user.phone_number|default:"Not specified" }}</p>
+                    
+                    <a href="#" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
