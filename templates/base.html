@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Air Quality Monitoring System{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'dashboard' %}" class="text-2xl font-bold">
+                Air Quality Monitor
+            </a>
+            <div class="space-x-4">
+                <a href="{% url 'dashboard' %}" class="hover:text-blue-200">Dashboard</a>
+                {% comment %}<a href="{% url 'stations_map' %}" class="hover:text-blue-200">Stations Map</a>
+                <a href="{% url 'historical_data' %}" class="hover:text-blue-200">Historical Data</a>
+                <a href="{% url 'alerts' %}" class="hover:text-blue-200">Alerts</a>{% endcomment %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="hover:text-blue-200">Profile</a>
+                    <a href="{% url 'logout' %}" class="hover:text-blue-200">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:text-blue-200">Login</a>
+                    <a href="{% url 'signup' %}" class="hover:text-blue-200">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Air Quality Monitoring System. All Rights Reserved.</p>
+            <div class="mt-2 space-x-4">
+                <a href="{% url 'about' %}" class="hover:text-blue-200">About</a>
+                <a href="{% url 'privacy_policy' %}" class="hover:text-blue-200">Privacy Policy</a>
+                <a href="{% url 'contact' %}" class="hover:text-blue-200">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WebSocket Connection Script -->
+    <script>
+        // WebSocket connection for real-time updates
+        const socket = new WebSocket('ws://{{ request.get_host }}/ws/air_quality/');
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            
+            // Update dashboard with real-time data
+            updateDashboardWithRealTimeData(data);
+        };
+
+        function updateDashboardWithRealTimeData(data) {
+            // Implement real-time dashboard update logic
+            console.log('Real-time update received:', data);
+            
+            // Example: Update AQI indicators
+            const aqiElement = document.getElementById('current-aqi');
+            if (aqiElement) {
+                aqiElement.textContent = data.aqi;
+                aqiElement.className = getAQIColorClass(data.aqi);
+            }
+        }
+
+        function getAQIColorClass(aqi) {
+            if (aqi <= 50) return 'text-green-500';
+            if (aqi <= 100) return 'text-yellow-500';
+            if (aqi <= 150) return 'text-orange-500';
+            if (aqi <= 200) return 'text-red-500';
+            return 'text-purple-500';
+        }
+    </script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Air Quality | Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container" x-data="dashboardData()">
+    <!-- Overall Air Quality Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- Current AQI Card -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-bold mb-2">Current Air Quality Index</h2>
+            <div id="current-aqi" class="text-4xl font-extrabold text-center" 
+                 x-text="currentAQI" 
+                 :class="getAQIColorClass(currentAQI)">
+                {{ current_aqi }}
+            </div>
+            <p class="text-center mt-2" x-text="getAQIDescription(currentAQI)">
+                {{ aqi_description }}
+            </p>
+        </div>
+
+        <!-- Top Pollutants Card -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-bold mb-2">Top Pollutants</h2>
+            <ul class="space-y-2">
+                <template x-for="pollutant in topPollutants" :key="pollutant.name">
+                    <li class="flex justify-between">
+                        <span x-text="pollutant.name" class="font-medium"></span>
+                        <span x-text="pollutant.level" class="text-gray-600"></span>
+                    </li>
+                </template>
+            </ul>
+        </div>
+
+        <!-- Station Status Card -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-bold mb-2">Monitoring Stations</h2>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600" x-text="activeStations">
+                        {{ active_stations }}
+                    </div>
+                    <p class="text-sm">Active</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-red-600" x-text="inactiveStations">
+                        {{ inactive_stations }}
+                    </div>
+                    <p class="text-sm">Inactive</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Visualizations -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- AQI Trend Chart -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-bold mb-4">AQI Trend</h2>
+            <canvas id="aqiTrendChart"></canvas>
+        </div>
+
+        <!-- Pollutant Comparison Chart -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-bold mb-4">Pollutant Levels</h2>
+            <canvas id="pollutantLevelsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Alerts -->
+    <div class="mt-6 bg-white shadow-md rounded-lg p-4">
+        <h2 class="text-xl font-bold mb-4">Recent Alerts</h2>
+        <table class="w-full">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="text-left p-2">Station</th>
+                    <th class="text-left p-2">Pollutant</th>
+                    <th class="text-left p-2">Level</th>
+                    <th class="text-left p-2">Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template x-for="alert in recentAlerts" :key="alert.id">
+                    <tr class="border-b">
+                        <td x-text="alert.station" class="p-2"></td>
+                        <td x-text="alert.pollutant" class="p-2"></td>
+                        <td x-text="alert.level" class="p-2" :class="getAlertLevelClass(alert.level)"></td>
+                        <td x-text="alert.timestamp" class="p-2"></td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function dashboardData() {
+        return {
+            currentAQI: {{ current_aqi|default:0 }},
+            activeStations: {{ active_stations|default:0 }},
+            inactiveStations: {{ inactive_stations|default:0 }},
+            topPollutants: [
+                {% for pollutant in top_pollutants %}
+                    {
+                        name: "{{ pollutant.name }}",
+                        level: "{{ pollutant.level }}"
+                    },
+                {% endfor %}
+            ],
+            recentAlerts: [
+                {% for alert in recent_alerts %}
+                    {
+                        id: {{ alert.id }},
+                        station: "{{ alert.station }}",
+                        pollutant: "{{ alert.pollutant }}",
+                        level: "{{ alert.level }}",
+                        timestamp: "{{ alert.timestamp }}"
+                    },
+                {% endfor %}
+            ],
+            getAQIColorClass(aqi) {
+                if (aqi <= 50) return 'text-green-500';
+                if (aqi <= 100) return 'text-yellow-500';
+                if (aqi <= 150) return 'text-orange-500';
+                if (aqi <= 200) return 'text-red-500';
+                return 'text-purple-500';
+            },
+            getAQIDescription(aqi) {
+                if (aqi <= 50) return 'Good';
+                if (aqi <= 100) return 'Moderate';
+                if (aqi <= 150) return 'Unhealthy for Sensitive Groups';
+                if (aqi <= 200) return 'Unhealthy';
+                return 'Very Unhealthy';
+            },
+            getAlertLevelClass(level) {
+                switch(level) {
+                    case 'High': return 'text-red-500';
+                    case 'Medium': return 'text-orange-500';
+                    case 'Low': return 'text-yellow-500';
+                    default: return '';
+                }
+            }
+        };
+    }
+
+    // Initialize Charts (requires Chart.js)
+    document.addEventListener('DOMContentLoaded', function() {
+        // AQI Trend Chart
+        const aqiCtx = document.getElementById('aqiTrendChart').getContext('2d');
+        new Chart(aqiCtx, {
+            type: 'line',
+            data: {
+                labels: [{% for date in aqi_trend_dates %}'{{ date }}',{% endfor %}],
+                datasets: [{
+                    label: 'AQI Trend',
+                    data: [{% for aqi in aqi_trend_values %}{{ aqi }},{% endfor %}],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Pollutant Levels Chart
+        const pollutantCtx = document.getElementById('pollutantLevelsChart').getContext('2d');
+        new Chart(pollutantCtx, {
+            type: 'bar',
+            data: {
+                labels: [{% for pollutant in pollutant_levels_labels %}'{{ pollutant }}',{% endfor %}],
+                datasets: [{
+                    label: 'Pollutant Levels',
+                    data: [{% for level in pollutant_levels_values %}{{ level }},{% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: false
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
