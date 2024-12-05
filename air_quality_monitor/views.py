@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -6,24 +7,12 @@ def base(request):
     return render(request, 'base.html')
 
 
+@login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
 
 
-def login(request):
-    return render(request, 'auth/login.html')
-
-
-def register(request):
-    return render(request, 'auth/signup.html')
-
-
-def logout(request):
-    return render(request, 'auth/login.html')
-
-
 def about(request):
-
     import pandas as pd
     air_df = pd.read_json("https://www.data.act.gov.au/resource/94a5-zqnn.json")
     print(f"Size......: {air_df.size}")
@@ -36,7 +25,6 @@ def privacy_policy(request):
 
 
 def contact(request):
-
     import pandas as pd
     import kagglehub
 
@@ -52,7 +40,6 @@ def contact(request):
 
 
 def datasetapi(request):
-
     import pandas as pd
     air_df = pd.read_json("https://www.data.act.gov.au/resource/94a5-zqnn.json")
     print(f"Size......: {air_df.size}")

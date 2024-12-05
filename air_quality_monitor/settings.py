@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'users.apps.UsersConfig',
+    'accounts.apps.AccountsConfig',
     'stations.apps.StationsConfig',
     'data_processing.apps.DataProcessingConfig',
 ]
@@ -123,7 +123,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Model
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 # Authentication Backend
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
