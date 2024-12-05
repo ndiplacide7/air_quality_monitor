@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">My Air Quality Stations</h1>
+    
+    <a href="{% url 'station_create' %}" class="btn btn-primary mb-3">
+        Add New Station
+    </a>
+
+    {% if stations %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Station Type</th>
+                    <th>Coordinates</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for station in stations %}
+                <tr>
+                    <td>{{ station.name }}</td>
+                    <td>{{ station.location }}</td>
+                    <td>{{ station.get_station_type_display }}</td>
+                    <td>{{ station.latitude }}, {{ station.longitude }}</td>
+                    <td>
+                        <a href="{% url 'station_update' station.pk %}" class="btn btn-sm btn-warning">
+                            Edit
+                        </a>
+                        <a href="{% url 'station_delete' station.pk %}" class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-info">
+            You have no air quality stations yet. 
+            <a href="{% url 'station_create' %}">Add your first station</a>
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

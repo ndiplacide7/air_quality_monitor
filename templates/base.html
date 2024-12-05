@@ -34,6 +34,7 @@
                 <a href="{% url 'alerts' %}" class="hover:text-blue-200">Alerts</a>{% endcomment %}
                 {% if user.is_authenticated %}
                     <a href="{% url 'dashboard' %}" class="hover:text-blue-200">Dashboard</a>
+                    <a href="{% url 'station_list' %}" class="hover:text-blue-200">Stations</a>
                     <a href="{% url 'profile' %}" class="hover:text-blue-200">Profile</a>
                     <a href="{% url 'logout' %}" class="hover:text-blue-200">Logout</a>
                 {% else %}
@@ -51,14 +52,14 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-blue-800 text-white py-4">
+    <footer class="bg-blue-800 text-white py-2">
         <div class="container mx-auto text-center">
             <p>&copy; 2024 Air Quality Monitoring System. All Rights Reserved.</p>
-            <div class="mt-2 space-x-4">
-                <a href="{% url 'about' %}" class="hover:text-blue-200">About</a>
-                <a href="{% url 'privacy_policy' %}" class="hover:text-blue-200">Privacy Policy</a>
-                <a href="{% url 'contact' %}" class="hover:text-blue-200">Contact</a>
-            </div>
+{#            <div class="mt-2 space-x-4">#}
+{#                <a href="{% url 'about' %}" class="hover:text-blue-200">About</a>#}
+{#                <a href="{% url 'privacy_policy' %}" class="hover:text-blue-200">Privacy Policy</a>#}
+{#                <a href="{% url 'contact' %}" class="hover:text-blue-200">Contact</a>#}
+{#            </div>#}
         </div>
     </footer>
 

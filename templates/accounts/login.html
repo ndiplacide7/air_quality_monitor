@@ -3,47 +3,53 @@
 
 {% block title %}Air Quality | Login{% endblock %}
 
-{% block content %}    
-    <div class="container auth-container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Login to Air Quality Monitoring</h2>
-                </div>
-                <div class="card-body">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+{% block content %}
+    
+<div class="container mx-auto">
+    <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">Login to Air Quality Monitoring</h2>
 
-                    <form method="post">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            <div class="form-group mb-3">
-                                {{ field.label_tag }}
-                                {{ field }}
-                                {% if field.help_text %}
-                                    <small class="form-text text-muted">{{ field.help_text }}</small>
-                                {% endif %}
-                                {% if field.errors %}
-                                    <div class="text-danger">
-                                        {{ field.errors }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                    </form>
-                    <div class="text-center mt-3">
-                        <p><a href="{% url 'password_reset' %}">Forgot Password?</a></p>
-                        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
-                    </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
                 </div>
-            </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                
+{#                <div>#}
+{#                    <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>#}
+{#                    <div class="mt-2">#}
+{#                      <input type="email" name="email" id="email" autocomplete="email" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">#}
+{#                    </div>#}
+{#                  </div>#}
+                
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ field.id_for_label }}">
+                        {{ field.label_tag }}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="text-gray-500 text-sm">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Login</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <p><a href="{% url 'password_reset' %}" class="text-blue-500 hover:underline">Forgot Password?</a></p>
+            <p>Don't have an account? <a href="{% url 'signup' %}" class="text-blue-500 hover:underline">Sign Up</a></p>
         </div>
     </div>
 </div>
