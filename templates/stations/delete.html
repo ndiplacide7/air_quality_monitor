@@ -2,12 +2,13 @@
 
 {% block content %}
 <div class="container mx-auto mt-4">  <h1 class="text-center mb-4">Delete Air Quality Station</h1>
-
+ <div class="container mx-auto px-4 py-8 flex justify-center items-center">
+    <div class="w-full max-w-md">
     <div class="alert alert-danger p-4 rounded-md shadow">  <p>Are you sure you want to delete the following station?</p>
         <ul class="list-disc ml-4">  <li><strong>Name:</strong> {{ station.name }}</li>
             <li><strong>Location:</strong> {{ station.location }}</li>
             <li><strong>Station Type:</strong> {{ station.get_station_type_display }}</li>
-            <li><strong>Coordinates:</strong> {{ station.latitude }}, {{ station.longitude }}</li>
+            <li><strong>Coordinates</strong>(Latitude : Longitude): {{ station.latitude }}, {{ station.longitude }}</li>
         </ul>
     </div>
 
@@ -15,5 +16,7 @@
         <button type="submit" class="btn btn-danger px-4 py-2 rounded-md shadow">Confirm Delete</button>
         <a href="{% url 'station_list' %}" class="btn btn-secondary px-4 py-2 rounded-md shadow ml-4">Cancel</a>
     </form>
+    </div>
+ </div>
 </div>
 {% endblock %}

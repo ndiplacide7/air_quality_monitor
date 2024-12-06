@@ -1,60 +1,95 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">Update Air Quality Station</h1>
+<div class="container mx-auto px-4 py-8 flex justify-center items-center">
+    <div class="w-full max-w-md">
+    <h1 class="text-center mb-4">Update Air Quality Station</h1>
 
     <form method="post">
         {% csrf_token %}
 
-        <div class="form-group mb-3">
-            <label for="{{ form.name.id_for_label }}">Station Name</label>
-{#            {{ form.name|add_class:'form-control' }}#}
-            {{ form.name }}
+        <div class="mb-4">
+            <label for="{{ form.name.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                Station Name
+            </label>
+            <input type="text" id="{{ form.name.id_for_label }}" name="{{ form.name.name }}" value="{{ form.name.value }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
             {% if form.name.errors %}
-                <div class="text-danger">{{ form.name.errors }}</div>
+                <div class="text-red-500 text-sm mt-2">
+                    {{ form.name.errors }}
+                </div>
             {% endif %}
         </div>
 
-        <div class="form-group mb-3">
-            <label for="{{ form.location.id_for_label }}">Location</label>
-            {{ form.location }}
+        <div class="mb-4">
+            <label for="{{ form.location.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                Location
+            </label>
+            <input type="text" id="{{ form.location.id_for_label }}" name="{{ form.location.name }}" value="{{ form.location.value }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
             {% if form.location.errors %}
-                <div class="text-danger">{{ form.location.errors }}</div>
+                <div class="text-red-500 text-sm mt-2">
+                    {{ form.location.errors }}
+                </div>
             {% endif %}
         </div>
 
-        <div class="row">
-            <div class="col-md-6 form-group mb-3">
-                <label for="{{ form.latitude.id_for_label }}">Latitude</label>
-{#                {{ form.latitude|add_class:'form-control' }}#}
-                {{ form.latitude }}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="mb-4">
+                <label for="{{ form.latitude.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                    Latitude
+                </label>
+                <input type="number" step="any" id="{{ form.latitude.id_for_label }}" name="{{ form.latitude.name }}" value="{{ form.latitude.value }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
                 {% if form.latitude.errors %}
-                    <div class="text-danger">{{ form.latitude.errors }}</div>
+                    <div class="text-red-500 text-sm mt-2">
+                        {{ form.latitude.errors }}
+                    </div>
                 {% endif %}
             </div>
 
-            <div class="col-md-6 form-group mb-3">
-                <label for="{{ form.longitude.id_for_label }}">Longitude</label>
-{#                {{ form.longitude|add_class:'form-control' }}#}
-                {{ form.longitude }}
+            <div class="mb-4">
+                <label for="{{ form.longitude.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                    Longitude
+                </label>
+                <input type="number" step="any" id="{{ form.longitude.id_for_label }}" name="{{ form.longitude.name }}" value="{{ form.longitude.value }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
                 {% if form.longitude.errors %}
-                    <div class="text-danger">{{ form.longitude.errors }}</div>
+                    <div class="text-red-500 text-sm mt-2">
+                        {{ form.longitude.errors }}
+                    </div>
                 {% endif %}
             </div>
         </div>
 
-        <div class="form-group mb-3">
-            <label for="{{ form.station_type.id_for_label }}">Station Type</label>
-{#            {{ form.station_type|add_class:'form-control' }}#}
-            {{ form.station_type }}
+        <div class="mb-4">
+            <label for="{{ form.station_type.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                Station Type
+            </label>
+{#            <select id="{{ form.station_type.id_for_label }}" name="{{ form.station_type.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">#}
+{#                {% for choice in form.station_type %}#}
+{#                    <option {% if form.station_type.name == choice %}selected{% endif %}>{{ choice }}</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+            <select id="{{ form.station_type.id_for_label }}" name="{{ form.station_type.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
+                {% for choice in form.station_type %}
+                {% if choice %}
+                    <option value="{{ choice }}" {% if choice.selected %}selected{% endif %}>{{ choice.label }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
             {% if form.station_type.errors %}
-                <div class="text-danger">{{ form.station_type.errors }}</div>
+                <div class="text-red-500 text-sm mt-2">
+                    {{ form.station_type.errors }}
+                </div>
             {% endif %}
         </div>
 
-        <button type="submit" class="btn btn-primary">Update Station</button>
-        <a href="{% url 'station_list' %}" class="btn btn-secondary">Cancel</a>
+        <div class="flex justify-center space-x-2">
+            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded shadow-sm">
+                Update Station
+            </button>
+            <a href="{% url 'station_list' %}" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded shadow-sm">
+                Cancel
+            </a>
+        </div>
     </form>
+    </div>
 </div>
 {% endblock %}
