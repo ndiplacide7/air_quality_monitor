@@ -70,7 +70,8 @@
             <select id="{{ form.station_type.id_for_label }}" name="{{ form.station_type.name }}" class="border border-gray-300 rounded-md p-2 w-full focus:border-indigo-500 focus:ring-indigo-500">
                 {% for choice in form.station_type %}
                 {% if choice %}
-                    <option value="{{ choice }}" {% if choice.selected %}selected{% endif %}>{{ choice.label }}</option>
+                    {{ choice }}
+{#                    <option value="{{ choice }}" {% if choice.selected %}selected{% endif %}>{{ choice }}</option>#}
                 {% endif %}
                 {% endfor %}
             </select>
