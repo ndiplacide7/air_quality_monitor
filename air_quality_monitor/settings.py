@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'stations.apps.StationsConfig',
     'data_processing.apps.DataProcessingConfig',
+    'air_quality_pipeline.apps.AirQualityPipelineConfig',
 ]
 
 MIDDLEWARE = [
@@ -163,3 +165,27 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'your-email'
 # EMAIL_HOST_PASSWORD = 'your-password'
+
+# Kafka Configuration
+KAFKA_BOOTSTRAP_SERVERS = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
+KAFKA_TOPIC_AIR_QUALITY = 'air_quality_topic'
+
+# HDFS Configuration
+HDFS_URL = os.getenv('HDFS_URL', 'http://localhost:9870')
+HDFS_USER = os.getenv('HDFS_USER', 'hadoop')
+
+# External API Configuration
+AIR_QUALITY_API_URL = 'https://www.data.act.gov.au/resource/94a5-zqnn.json'
+
+# Celery Beat Schedule
+CELERY_BEAT_SCHEDULE = {
+    'fetch-air-quality-every-hour': {
+        'task': 'air_quality_pipeline.tasks.fetch_and_process_air_quality_data',
+        'schedule': timedelta(hours=1),
+    },
+}
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
