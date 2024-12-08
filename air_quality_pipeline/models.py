@@ -11,6 +11,12 @@ class AirQualityRecord(models.Model):
     pollutant = models.CharField(max_length=50)
     concentration = models.FloatField()
     units = models.CharField(max_length=20)
+    # Air Quality Metrics
+    pm25 = models.FloatField(default=0.0)  # PM 2.5 concentration
+    pm10 = models.FloatField(default=0.0)  # PM 10 concentration
+    ozone = models.FloatField(default=0.0)
+    nitrogen_dioxide = models.FloatField(default=0.0)
+    carbon_monoxide = models.FloatField(default=0.0)
 
     # Metadata fields
     ingested_at = models.DateTimeField(default=timezone.now)
@@ -20,7 +26,7 @@ class AirQualityRecord(models.Model):
         indexes = [
             models.Index(fields=['station_id', 'timestamp']),
         ]
-        unique_together = ('station_id', 'timestamp', 'pollutant')
+        # unique_together = ('station_id', 'timestamp', 'pollutant')
 
 
 class PipelineRunLog(models.Model):

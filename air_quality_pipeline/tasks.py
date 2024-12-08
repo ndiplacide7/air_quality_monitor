@@ -16,7 +16,7 @@ from air_quality_monitor.settings import AIR_QUALITY_API_URL, NAMENODE_CONTAINER
 
 class AirQualityDataPipeline:
     def __init__(self):
-        # Simplified configuration
+
         self.api_url = AIR_QUALITY_API_URL
         self.hdfs_base_path = '/air-quality-data/'
         self.hdfs_url = os.getenv('HDFS_URL', 'http://localhost:9870')
@@ -31,12 +31,15 @@ class AirQualityDataPipeline:
         Fetch air quality data from an API
         """
         try:
-            # Example API call - replace with your actual API endpoint
+            # API call
             response = requests.get(self.api_url)
             response.raise_for_status()
 
             # Parse JSON data
             data = response.json()
+
+            df = pd.DataFrame(data)
+            print(df.columns)
 
             # Convert to list of dictionaries if needed
             if not isinstance(data, list):
@@ -56,12 +59,17 @@ class AirQualityDataPipeline:
         for record in raw_data:
             # Create a new dictionary to avoid modification issues
             processed_record = {
-                'station_id': record.get('station_id', 'Unknown'),
+                'station_id': record.get('name', 'Unknown'),
+                'pm25': record.get('pm2_5', 0.0),
+                'pm10': record.get('pm10', 0.0),
+                'ozone': record.get('o3_4hr', 0.0),
+                'nitrogen_dioxide': record.get('no2', 0.0),
+                'carbon_monoxide': record.get('co', 0.0),
                 'timestamp': timezone.now(),  # Use Django's timezone.now()
-                'pollutant': record.get('pollutant', 'Unknown'),
+                'pollutant': record.get('aqi_site', 'Unknown'),
                 'concentration': float(record.get('concentration', 0.0)),
                 'units': record.get('units', 'Unknown'),
-                'source': record.get('source', 'API')
+                'source': record.get('source', 'ACT API')
             }
             processed_records.append(processed_record)
 
@@ -77,6 +85,9 @@ class AirQualityDataPipeline:
 
             # Ensure timestamp is properly handled
             df['timestamp'] = pd.to_datetime(df['timestamp'])
+            df['ozone'] = pd.to_numeric(df['ozone'], errors='coerce')
+            df['nitrogen_dioxide'] = pd.to_numeric(df['nitrogen_dioxide'], errors='coerce')
+            df['carbon_monoxide'] = pd.to_numeric(df['carbon_monoxide'], errors='coerce')
 
             # Generate a unique filename
             filename = f"air_quality_{datetime.now().strftime('%Y%m%d_%H%M%S')}.parquet"
