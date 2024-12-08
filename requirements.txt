@@ -1,0 +1,7 @@
+Django>=4.0
+pandas
+pyarrow
+requests
+confluent-kafka
+hdfs
+pytz
