@@ -45,8 +45,8 @@ In an era of increasing environmental concerns, real-time air quality monitoring
     - Multiple compatibility and configuration issues with distributed systems
 - **Solution**:
   - Comprehensive Docker-Based Solution: Leveraged Docker containers to create a consistent, reproducible development environment
+
 ### Data Source
-3. Time
 
 The project retrieves real-time air quality data from the ACT (Australian Capital Territory) Ambient Air Quality Monitoring API: https://www.data.act.gov.au/resource/94a5-zqnn.json
 
