@@ -45,6 +45,21 @@ In an era of increasing environmental concerns, real-time air quality monitoring
     - Multiple compatibility and configuration issues with distributed systems
 - **Solution**:
   - Comprehensive Docker-Based Solution: Leveraged Docker containers to create a consistent, reproducible development environment
+  - ![img.png](img.png)
+
+### Team Contributions
+
+```markdown
+# Student Information
+------------------------------------------------
+| No. | Name              | Registration Number |
+|-----|-------------------|---------------------|
+| 1   | NDUWAYEZU Placide | 223027936           |
+| 2   | UWASE Aline       | 218009283           |
+| 3   | MUREMYI Samuel    | 223026694           |
+-------------------------------------------------
+
+```
 
 ### Data Source
 
