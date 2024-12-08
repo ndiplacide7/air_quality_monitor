@@ -50,7 +50,7 @@ In an era of increasing environmental concerns, real-time air quality monitoring
 ### Team Contributions
 
 ```markdown
-# Student Information
+
 ------------------------------------------------
 | No. | Name              | Registration Number |
 |-----|-------------------|---------------------|
