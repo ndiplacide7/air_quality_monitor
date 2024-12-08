@@ -77,10 +77,31 @@ WSGI_APPLICATION = 'air_quality_monitor.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'air_quality_db',
+#         'USER': 'air_quality_db_user',
+#         'PASSWORD': 'air_quality_db_pass',
+#         'HOST': 'db',  # This will resolve to the MySQL container name
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "OPTIONS": {
+            "read_default_file": "db_config.cnf",
+        },
+        "HOST": "localhost"
     }
 }
 
@@ -181,5 +202,3 @@ NAMENODE_CONTAINER_NAME = 'namenode'
 
 # External API Configuration
 AIR_QUALITY_API_URL = 'https://www.data.act.gov.au/resource/94a5-zqnn.json'
-# AIR_QUALITY_API_URL = 'https://jsonplaceholder.typicode.com/todos/1'
-

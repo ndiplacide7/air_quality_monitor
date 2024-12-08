@@ -1,0 +1,5 @@
+[client]
+database = air_quality_db
+user = air_quality_db_user
+password = air_quality_db_pass
+default-character-set = utf8
