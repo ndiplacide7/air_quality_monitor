@@ -176,9 +176,10 @@ KAFKA_TOPIC_AIR_QUALITY = 'air_quality_topic'
 # HDFS Configuration
 HDFS_URL = os.getenv('HDFS_URL', 'http://localhost:9870')
 HDFS_USER = os.getenv('HDFS_USER', 'root')
-HDFS_BASE_PATH = '/air-quality-data/'
+HDFS_BASE_PATH = '/air-quality-data'
+NAMENODE_CONTAINER_NAME = 'namenode'
 
 # External API Configuration
-# AIR_QUALITY_API_URL = 'https://www.data.act.gov.au/resource/94a5-zqnn.json'
-AIR_QUALITY_API_URL = 'https://jsonplaceholder.typicode.com/todos/1'
+AIR_QUALITY_API_URL = 'https://www.data.act.gov.au/resource/94a5-zqnn.json'
+# AIR_QUALITY_API_URL = 'https://jsonplaceholder.typicode.com/todos/1'
 

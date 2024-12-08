@@ -1,4 +1,6 @@
 import os
+import subprocess
+
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pandas as pd
@@ -9,7 +11,7 @@ from datetime import datetime
 import pytz
 from hdfs import InsecureClient
 
-from air_quality_monitor.settings import AIR_QUALITY_API_URL
+from air_quality_monitor.settings import AIR_QUALITY_API_URL, NAMENODE_CONTAINER_NAME, HDFS_BASE_PATH
 
 
 class AirQualityDataPipeline:
@@ -22,6 +24,7 @@ class AirQualityDataPipeline:
         self.hdfs_base_path = os.getenv('HDFS_BASE_PATH', '/air-quality-data/')
         # Create HDFS client
         self.hdfs_client = InsecureClient(self.hdfs_url, user=self.hdfs_user)
+        self.namenode_container_name = NAMENODE_CONTAINER_NAME
 
     def fetch_air_quality_data(self):
         """
@@ -66,7 +69,7 @@ class AirQualityDataPipeline:
 
     def save_to_hdfs(self, processed_data):
         """
-        Save processed data to HDFS
+        Save processed data to HDFS using docker cp.
         """
         try:
             # Create DataFrame with explicit index
@@ -80,27 +83,50 @@ class AirQualityDataPipeline:
             print(f"Filename.......: {filename}")
             hdfs_path = os.path.join(self.hdfs_base_path, filename)
             print(f"HDFS path......: {hdfs_path}")
+
             # Convert to PyArrow table
             table = pa.Table.from_pandas(df)
 
-            # Use a temporary local file to write and then upload
+            # Use a temporary local file to write first
             local_temp_file = f"/tmp/{filename}"
-
             print(f"Data size.......: {table.num_rows} rows")
 
-            # Write to local temporary file first
+            # Write to local temporary file
             pq.write_table(table, local_temp_file)
 
-            # Upload to HDFS
-            with open(local_temp_file, 'rb') as local_file:
-                self.hdfs_client.write(hdfs_path, local_file)
+            # Copy the file to the namenode container
+            container_temp_path = f"/{filename}"
+
+            # Create the directory inside the namenode container (if not exists)
+            subprocess.run(
+                ["docker", "exec", self.namenode_container_name, "mkdir", "-p", HDFS_BASE_PATH],
+                check=True
+            )
+
+            print(f"Directory created in container: {HDFS_BASE_PATH}")
+
+            # Copy the file to the container's air-quality-data directory
+            container_temp_path = os.path.join(HDFS_BASE_PATH, filename)
+
+            subprocess.run(
+                ["docker", "cp", local_temp_file, f"{self.namenode_container_name}:{container_temp_path}"],
+                check=True
+            )
+            print(f"File copied to container: {self.namenode_container_name}:{container_temp_path}")
+
+            # # Use HDFS client to move the file to the correct HDFS path
+            # self.hdfs_client.write(hdfs_path, container_temp_path)
 
             # Optional: Remove local temporary file
             os.remove(local_temp_file)
+            print(f"Local temp file removed: {local_temp_file}")
 
             print(f"Data saved to HDFS: {hdfs_path}")
             return hdfs_path
 
+        except subprocess.CalledProcessError as e:
+            print(f"Error during docker cp: {e}")
+            return None
         except Exception as e:
             print(f"HDFS storage error: {e}")
             return None
