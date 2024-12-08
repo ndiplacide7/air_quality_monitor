@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+
+# from air_quality_monitor import settings
+# from air_quality_pipeline.services.producer import KafkaMessageProducer
 
 
 def base(request):
@@ -25,6 +28,29 @@ def about(request):
 
 
 def privacy_policy(request):
+    # # Fetch data from API
+    # import requests
+    # response = requests.get(settings.AIR_QUALITY_API_URL)
+    # response.raise_for_status()
+    # air_quality_records = response.json()
+    #
+    # print(f"API Response..............: {air_quality_records}")
+    # Fetch data from API
+
+    # import requests
+    # response = requests.get(settings.AIR_QUALITY_API_URL)
+    # response.raise_for_status()
+    # air_quality_records = response.json()
+    #
+    # print(f"API Response..............: {air_quality_records}")
+    # producer = KafkaMessageProducer()
+    # result = producer.send_message(air_quality_records)
+
+    # return JsonResponse({
+    #     'status': 'success' if result else 'failed',
+    #     'message': air_quality_records
+    # })
+
     return HttpResponse('Privacy Policy')
 
 

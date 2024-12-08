@@ -39,3 +39,8 @@ celerybeat-schedule
 # Other common files
 *.DS_Store
 Thumbs.db
+/test_redis.py
+
+
+*.bat
+*.dir

@@ -170,22 +170,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 KAFKA_BOOTSTRAP_SERVERS = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
 KAFKA_TOPIC_AIR_QUALITY = 'air_quality_topic'
 
+# KAFKA_BOOTSTRAP_SERVERS = 'localhost:9092'
+# KAFKA_TOPIC_AIR_QUALITY = 'air_quality_topic'
+
 # HDFS Configuration
 HDFS_URL = os.getenv('HDFS_URL', 'http://localhost:9870')
-HDFS_USER = os.getenv('HDFS_USER', 'hadoop')
+HDFS_USER = os.getenv('HDFS_USER', 'root')
+HDFS_BASE_PATH = '/air-quality-data/'
 
 # External API Configuration
-AIR_QUALITY_API_URL = 'https://www.data.act.gov.au/resource/94a5-zqnn.json'
-
-# Celery Beat Schedule
-CELERY_BEAT_SCHEDULE = {
-    'fetch-air-quality-every-hour': {
-        'task': 'air_quality_pipeline.tasks.fetch_and_process_air_quality_data',
-        'schedule': timedelta(hours=1),
-    },
-}
-
-# Celery Configuration
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# AIR_QUALITY_API_URL = 'https://www.data.act.gov.au/resource/94a5-zqnn.json'
+AIR_QUALITY_API_URL = 'https://jsonplaceholder.typicode.com/todos/1'
 
