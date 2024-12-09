@@ -206,4 +206,4 @@ AWS_RDS_PASSWORD=your-password
 
 ### Contact
 - Placide - ndiplacide7@gailcom
-- Project Link: https://github.com/your-username/air_quality_monitor
+- Project Link: https://github.com/ndiplacide7/air_quality_monitor
