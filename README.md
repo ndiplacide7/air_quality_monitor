@@ -2,17 +2,7 @@
 
 ### Team Contributions
 
-```markdown
-## GROUP NO : 7
-  ------------------------------------------------
-  | No. | Name              | Registration Number |
-  |-----|-------------------|---------------------|
-  | 1   | NDUWAYEZU Placide | 223027936           |
-  | 2   | UWASE Aline       | 218009283           |
-  | 3   | MUREMYI Samuel    | 223026694           |
-  -------------------------------------------------
 
-```
 
 ## Project Case Study
 ### Background and Motivation
@@ -63,17 +53,7 @@ In an era of increasing environmental concerns, real-time air quality monitoring
 
 ### Team Contributions
 
-```markdown
 
-------------------------------------------------
-| No. | Name              | Registration Number |
-|-----|-------------------|---------------------|
-| 1   | NDUWAYEZU Placide | 223027936           |
-| 2   | UWASE Aline       | 218009283           |
-| 3   | MUREMYI Samuel    | 223026694           |
--------------------------------------------------
-
-```
 
 ### Data Source
 
